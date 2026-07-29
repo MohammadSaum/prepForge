@@ -1,7 +1,7 @@
 package com.prepForge.prepForge_backend.service;
 
 import com.prepForge.prepForge_backend.dto.LoginRequest;
-import org.jspecify.annotations.NonNull;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.prepForge.prepForge_backend.dto.RegisterRequest;
 import com.prepForge.prepForge_backend.entity.User;
@@ -11,10 +11,13 @@ import java.time.LocalDateTime;
 
 @Service
 public class UserService {
-    private final UserRepository userRepository;
 
-    public UserService(UserRepository userRepository) {
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public String register(RegisterRequest request) {
@@ -25,7 +28,7 @@ public class UserService {
         User user = User.builder()
                 .name(request.getName())
                 .email(request.getEmail())
-                .password(request.getPassword())
+                .password(passwordEncoder.encode(request.getPassword()))
                 .createdAt(LocalDateTime.now())
                 .build();
 
@@ -43,7 +46,7 @@ public class UserService {
             return "User not found";
         }
 
-        if(!user.getPassword().equals(request.getPassword())) {
+        if(!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             return "Invalid password";
         }
 
