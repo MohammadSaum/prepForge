@@ -1,5 +1,6 @@
 package com.prepForge.prepForge_backend.controller;
 
+import com.prepForge.prepForge_backend.dto.LoginRequest;
 import com.prepForge.prepForge_backend.dto.RegisterRequest;
 import com.prepForge.prepForge_backend.service.UserService;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,5 +20,10 @@ public class UserController {
     @PostMapping("/register")
     public String register(@RequestBody RegisterRequest request) {
         return userService.register(request);
+    }
+
+    @PostMapping("/login")
+    public String login(@RequestBody LoginRequest request) {
+        return userService.login(request);
     }
 }
