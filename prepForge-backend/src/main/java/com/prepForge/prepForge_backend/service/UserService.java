@@ -1,6 +1,8 @@
 package com.prepForge.prepForge_backend.service;
 
 import com.prepForge.prepForge_backend.dto.LoginRequest;
+import com.prepForge.prepForge_backend.dto.LoginResponse;
+import com.prepForge.prepForge_backend.security.JwtService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.prepForge.prepForge_backend.dto.RegisterRequest;
@@ -14,10 +16,12 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtService jwtService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.jwtService = jwtService;
     }
 
     public String register(RegisterRequest request) {
@@ -38,18 +42,20 @@ public class UserService {
     }
 
     // Login service
-    public String login(LoginRequest request) {
+    public LoginResponse login(LoginRequest request) {
         User user = userRepository.findByEmail(request.getEmail())
                 .orElse(null);
 
         if(user == null) {
-            return "User not found";
+            return new LoginResponse("User not found");
         }
 
         if(!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-            return "Invalid password";
+            return new LoginResponse("Invalid password");
         }
 
-        return "Login Successfull";
+        String token  = jwtService.generateToken(user.getEmail());
+
+        return new LoginResponse(token);
     }
 }
