@@ -3,6 +3,7 @@ package com.prepForge.prepForge_backend.controller;
 import com.prepForge.prepForge_backend.dto.AddQuestionRequest;
 import com.prepForge.prepForge_backend.entity.Question;
 import com.prepForge.prepForge_backend.service.QuestionService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,7 +23,7 @@ public class QuestionController {
     }
 
     @PostMapping
-    public ResponseEntity<Question> addQuestion(@RequestBody AddQuestionRequest request) {
+    public ResponseEntity<Question> addQuestion(@Valid @RequestBody AddQuestionRequest request) {
 
         Question question = questionService.addQuestion(request);
 
