@@ -42,4 +42,8 @@ public class Question {
     @JsonIgnore
     @OneToOne(mappedBy = "question", cascade = CascadeType.ALL)
     private Progress progress;
+
+    @JsonIgnore
+    @OneToOne(mappedBy = "question", cascade = CascadeType.ALL)
+    private Note note;
 }
