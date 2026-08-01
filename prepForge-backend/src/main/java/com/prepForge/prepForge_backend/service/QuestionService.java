@@ -2,12 +2,12 @@ package com.prepForge.prepForge_backend.service;
 
 import com.prepForge.prepForge_backend.dto.AddQuestionRequest;
 import com.prepForge.prepForge_backend.dto.UpdateQuestionRequest;
+import com.prepForge.prepForge_backend.entity.Progress;
 import com.prepForge.prepForge_backend.entity.Question;
 import com.prepForge.prepForge_backend.entity.User;
+import com.prepForge.prepForge_backend.repository.ProgressRepository;
 import com.prepForge.prepForge_backend.repository.QuestionRepository;
 import com.prepForge.prepForge_backend.repository.UserRepository;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,11 +18,13 @@ public class QuestionService {
     private final QuestionRepository questionRepository;
     private final UserRepository userRepository;
     private final AuthenticationService authenticationService;
+    private final ProgressRepository progressRepository;
 
-    public QuestionService(QuestionRepository questionRepository, UserRepository userRepository, AuthenticationService authenticationService) {
+    public QuestionService(QuestionRepository questionRepository, UserRepository userRepository, AuthenticationService authenticationService, ProgressRepository progressRepository) {
         this.questionRepository = questionRepository;
         this.userRepository = userRepository;
         this.authenticationService = authenticationService;
+        this.progressRepository = progressRepository;
     }
 
     public Question addQuestion(AddQuestionRequest request) {
@@ -43,7 +45,20 @@ public class QuestionService {
                 .user(user)
                 .build();
 
-        return questionRepository.save(question);
+        Question savedQuestion = questionRepository.save(question);
+
+        Progress progress = Progress.builder()
+                .favorite(false)
+                .confidence(0)
+                .revisionCount(0)
+                .question(savedQuestion)
+                .build();
+
+        progressRepository.save(progress);
+
+        savedQuestion.setProgress(progress);
+
+        return savedQuestion;
     }
 
     public List<Question> getMyQuestions() {

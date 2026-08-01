@@ -1,5 +1,6 @@
 package com.prepForge.prepForge_backend.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import enums.Difficulty;
 import enums.Platform;
 import enums.Status;
@@ -37,4 +38,8 @@ public class Question {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    @JsonIgnore
+    @OneToOne(mappedBy = "question", cascade = CascadeType.ALL)
+    private Progress progress;
 }
