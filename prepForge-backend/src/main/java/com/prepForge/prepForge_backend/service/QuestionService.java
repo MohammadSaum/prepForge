@@ -17,19 +17,17 @@ public class QuestionService {
 
     private final QuestionRepository questionRepository;
     private final UserRepository userRepository;
+    private final AuthenticationService authenticationService;
 
-    public QuestionService(QuestionRepository questionRepository, UserRepository userRepository) {
+    public QuestionService(QuestionRepository questionRepository, UserRepository userRepository, AuthenticationService authenticationService) {
         this.questionRepository = questionRepository;
         this.userRepository = userRepository;
+        this.authenticationService = authenticationService;
     }
 
     public Question addQuestion(AddQuestionRequest request) {
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        String email = authentication.getName();
-
-        User user = userRepository.findByEmail(email).orElseThrow();
+        User user = authenticationService.getCurrentUser();
 
         if (questionRepository.findByLinkAndUser(request.getLink(), user).isPresent()) {
             throw new RuntimeException("Question already exists.");
@@ -49,34 +47,20 @@ public class QuestionService {
     }
 
     public List<Question> getMyQuestions() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        String email = authentication.getName();
-
-        User user = userRepository.findByEmail(email).orElseThrow();
+        User user = authenticationService.getCurrentUser();
 
         return questionRepository.findByUser(user);
     }
 
     public Question getQuestion(Long id) {
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        String email = authentication.getName();
-
-        User user = userRepository.findByEmail(email).orElseThrow();
+        User user = authenticationService.getCurrentUser();
 
         return questionRepository.findByIdAndUser(id, user).orElseThrow(() -> new RuntimeException("Question not found"));
     }
 
     public Question updateQuestion(Long id, UpdateQuestionRequest request) {
-        Authentication authentication =
-                SecurityContextHolder.getContext().getAuthentication();
-
-        String email = authentication.getName();
-
-        User user = userRepository.findByEmail(email)
-                .orElseThrow();
+        User user = authenticationService.getCurrentUser();
 
         Question question = questionRepository
                 .findByIdAndUser(id, user)
@@ -94,13 +78,7 @@ public class QuestionService {
     }
 
     public void deleteQuestion(Long id) {
-        Authentication authentication =
-                SecurityContextHolder.getContext().getAuthentication();
-
-        String email = authentication.getName();
-
-        User user = userRepository.findByEmail(email)
-                .orElseThrow();
+        User user = authenticationService.getCurrentUser();
 
         Question question = questionRepository
                 .findByIdAndUser(id, user)
