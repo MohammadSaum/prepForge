@@ -4,7 +4,12 @@ import com.prepForge.prepForge_backend.dto.AddQuestionRequest;
 import com.prepForge.prepForge_backend.dto.UpdateQuestionRequest;
 import com.prepForge.prepForge_backend.entity.Question;
 import com.prepForge.prepForge_backend.service.QuestionService;
+import enums.Difficulty;
+import enums.Status;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,8 +36,17 @@ public class QuestionController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Question>> getMyQuestions() {
-        return ResponseEntity.ok(questionService.getMyQuestions());
+    public ResponseEntity<List<Question>> getMyQuestions(
+            @RequestParam(required = false) Difficulty difficulty,
+            @RequestParam(required = false) Status status,
+            @RequestParam(required = false) String topic
+            ) {
+
+        return ResponseEntity.ok(questionService.getMyQuestions(
+                difficulty,
+                status,
+                topic
+        ));
     }
 
     @GetMapping("/{id}")
@@ -54,5 +68,18 @@ public class QuestionController {
         questionService.deleteQuestion(id);
 
         return ResponseEntity.ok("Question Deleted Successfully");
+    }
+
+    @GetMapping("/page")
+    public ResponseEntity<Page<Question>> getQuestions(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size)
+
+    {
+
+        Pageable pageable = PageRequest.of(page, size);
+
+        return ResponseEntity.ok(questionService.getQuestions(pageable));
+
     }
 }

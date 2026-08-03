@@ -8,6 +8,10 @@ import com.prepForge.prepForge_backend.entity.User;
 import com.prepForge.prepForge_backend.repository.ProgressRepository;
 import com.prepForge.prepForge_backend.repository.QuestionRepository;
 import com.prepForge.prepForge_backend.repository.UserRepository;
+import enums.Difficulty;
+import enums.Status;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -61,10 +65,40 @@ public class QuestionService {
         return savedQuestion;
     }
 
-    public List<Question> getMyQuestions() {
+    public Page<Question> getQuestions(Pageable pageable) {
+        User user = authenticationService.getCurrentUser();
+        return questionRepository.findByUser(user, pageable);
+    }
+
+    public List<Question> getMyQuestions(Difficulty difficulty,
+                                         Status status,
+                                         String topic
+                                         ) {
+
         User user = authenticationService.getCurrentUser();
 
-        return questionRepository.findByUser(user);
+        List<Question> questions =
+                questionRepository.findByUser(user);
+
+        if(difficulty != null) {
+            questions = questions.stream()
+                    .filter(q -> q.getDifficulty() == difficulty)
+                    .toList();
+        }
+
+        if(status != null) {
+            questions = questions.stream()
+                    .filter(q -> q.getStatus() == status)
+                    .toList();
+        }
+
+        if(topic != null && !topic.isBlank()) {
+            questions = questions.stream()
+                    .filter(q -> q.getTopic().equalsIgnoreCase((topic)))
+                    .toList();
+        }
+
+        return questions;
     }
 
     public Question getQuestion(Long id) {
