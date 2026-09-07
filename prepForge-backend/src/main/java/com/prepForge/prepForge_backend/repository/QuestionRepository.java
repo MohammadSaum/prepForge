@@ -31,4 +31,44 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
     List<Question> findByUserAndDifficultyAndStatus(User user, Difficulty difficulty, Status status);
 
     List<Question> findByUserAndDifficultyAndStatusAndTopic(User user, Difficulty difficulty, Status status, String topic);
+
+    Page<Question> findByUserAndDifficulty(
+            User user,
+            Difficulty difficulty,
+            Pageable pageable);
+
+    Page<Question> findByUserAndStatus(
+            User user,
+            Status status,
+            Pageable pageable);
+
+    Page<Question> findByUserAndTopic(
+            User user,
+            String topic,
+            Pageable pageable);
+
+    Page<Question> findByUserAndDifficultyAndStatus(
+            User user,
+            Difficulty difficulty,
+            Status status,
+            Pageable pageable);
+
+    Page<Question> findByUserAndDifficultyAndTopic(
+            User user,
+            Difficulty difficulty,
+            String topic,
+            Pageable pageable);
+
+    Page<Question> findByUserAndStatusAndTopic(
+            User user,
+            Status status,
+            String topic,
+            Pageable pageable);
+
+    Page<Question> findByUserAndDifficultyAndStatusAndTopic(
+            User user,
+            Difficulty difficulty,
+            Status status,
+            String topic,
+            Pageable pageable);
 }

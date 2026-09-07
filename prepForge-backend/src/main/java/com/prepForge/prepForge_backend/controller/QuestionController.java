@@ -73,13 +73,20 @@ public class QuestionController {
     @GetMapping("/page")
     public ResponseEntity<Page<Question>> getQuestions(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size)
-
-    {
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) Difficulty difficulty,
+            @RequestParam(required = false) Status status,
+            @RequestParam(required = false) String topic) {
 
         Pageable pageable = PageRequest.of(page, size);
 
-        return ResponseEntity.ok(questionService.getQuestions(pageable));
-
+        return ResponseEntity.ok(
+                questionService.getQuestions(
+                        pageable,
+                        difficulty,
+                        status,
+                        topic
+                )
+        );
     }
 }

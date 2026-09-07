@@ -65,8 +65,49 @@ public class QuestionService {
         return savedQuestion;
     }
 
-    public Page<Question> getQuestions(Pageable pageable) {
+    public Page<Question> getQuestions(
+            Pageable pageable,
+            Difficulty difficulty,
+            Status status,
+            String topic) {
+
         User user = authenticationService.getCurrentUser();
+
+        if (difficulty != null && status != null && topic != null && !topic.isBlank()) {
+            return questionRepository.findByUserAndDifficultyAndStatusAndTopic(
+                    user, difficulty, status, topic, pageable);
+        }
+
+        if (difficulty != null && status != null) {
+            return questionRepository.findByUserAndDifficultyAndStatus(
+                    user, difficulty, status, pageable);
+        }
+
+        if (difficulty != null && topic != null && !topic.isBlank()) {
+            return questionRepository.findByUserAndDifficultyAndTopic(
+                    user, difficulty, topic, pageable);
+        }
+
+        if (status != null && topic != null && !topic.isBlank()) {
+            return questionRepository.findByUserAndStatusAndTopic(
+                    user, status, topic, pageable);
+        }
+
+        if (difficulty != null) {
+            return questionRepository.findByUserAndDifficulty(
+                    user, difficulty, pageable);
+        }
+
+        if (status != null) {
+            return questionRepository.findByUserAndStatus(
+                    user, status, pageable);
+        }
+
+        if (topic != null && !topic.isBlank()) {
+            return questionRepository.findByUserAndTopic(
+                    user, topic, pageable);
+        }
+
         return questionRepository.findByUser(user, pageable);
     }
 
