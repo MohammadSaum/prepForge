@@ -3,6 +3,9 @@ import Register from "./pages/Register";
 import Login from "./pages/Login";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Dashboard from "./pages/Dashboard";
+import Questions from "./pages/Questions";
+import AddQuestion from "./pages/AddQuestion";
+import EditQuestion from "./pages/EditQuestion";
 
 const App = () => {
   return (
@@ -24,6 +27,34 @@ const App = () => {
                         <ProtectedRoute>
                             <Dashboard/>
                         </ProtectedRoute>}
+            />
+
+            <Route 
+                    path="/questions"
+                    element={
+                        <ProtectedRoute>
+                            <Questions />
+                        </ProtectedRoute>
+                        
+                    }
+            />
+
+            <Route
+                path="/questions/add"
+                element={
+                    <ProtectedRoute>
+                        <AddQuestion />
+                    </ProtectedRoute>
+                }
+            />
+
+            <Route
+                path="/questions/edit/:id"
+                element={
+                    <ProtectedRoute>
+                        <EditQuestion />
+                    </ProtectedRoute>
+                }
             />
 
         </Routes>    
