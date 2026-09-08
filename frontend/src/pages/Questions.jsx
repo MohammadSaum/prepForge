@@ -113,17 +113,37 @@ function Questions() {
                     onStatusChange={handleStatusChange}
                 /> 
                 <div>
-                    {questions.map((question) => (
-                        <QuestionCard
-                            key={question.id}
-                            question={question}
-                            onDelete={(deletedId) => {
-                                setQuestions((prev) =>
-                                    prev.filter((q) => q.id !== deletedId)
-                                );
-                            }}
-                        />
-                    ))}
+                    {questions.length === 0 ? (
+                        <div className="border rounded-xl p-10 text-center">
+                            <h2 className="text-xl font-semibold">
+                                No questions found
+                            </h2>
+
+                            <p className="text-gray-500 mt-2">
+                                Add a question or try changing your filters.
+                            </p>
+                        </div>
+                    ) : (
+                        questions.map((question) => (
+                            <QuestionCard
+                                key={question.id}
+                                question={question}
+                                onDelete={(deletedId) => {
+                                    setQuestions((prev) => {
+                                        const updatedQuestions = prev.filter(
+                                            (q) => q.id !== deletedId
+                                        );
+
+                                        if (updatedQuestions.length === 0 && currentPage > 0) {
+                                            setCurrentPage((prevPage) => prevPage - 1);
+                                        }
+
+                                        return updatedQuestions;
+                                    });
+                                }}
+                            />
+                        ))
+                    )}
                 </div>
 
                 {questions.length > 0 && (

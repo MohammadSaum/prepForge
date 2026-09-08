@@ -6,7 +6,7 @@ const AddQuestion = () => {
 
     const [formData, setFormData] = useState({
         title:"",
-        difficulty:"",
+        difficulty:"EASY",
         platform: "",
         topic: "",
         link: "",
@@ -77,15 +77,17 @@ const AddQuestion = () => {
                     <option value="HARD">Hard</option>
             </select>
 
-            <input
-                    type="text"
+            <select
                     name="platform"
-                    placeholder="Platform"
                     value={formData.platform}
                     onChange={handleChange}
-                    required
                     className="border rounded-lg p-3 w-full"
-            />
+                >
+                    <option value="LEETCODE">LeetCode</option>
+                    <option value="HACKERRANK">HackerRank</option>
+                    <option value="CODEFORCES">Codeforces</option>
+                    <option value="OTHER">Other</option>
+            </select>
 
             <input
                     type="text"
@@ -123,7 +125,7 @@ const AddQuestion = () => {
                         disabled={loading}
                         className="border rounded-lg px-5 py-2 disabled:opacity-50"
                     >
-                        {loading ? "Adding..." : "Add Question"}
+                        {loading ? "Adding" : "Add Question"}
                     </button>
 
                     <button

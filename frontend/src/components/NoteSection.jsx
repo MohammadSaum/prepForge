@@ -16,7 +16,7 @@ function NotesSection({ questionId }) {
                 setContent(response.data.content);
                 setHasNote(true);
             } catch (error) {
-                if (error.response?.status === 404) {
+                if (error.response?.status === 400) {
                     setHasNote(false);
                 } else {
                     setError("Failed to load note");
