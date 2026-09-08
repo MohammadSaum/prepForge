@@ -53,6 +53,14 @@ function QuestionCard({ question, onDelete }) {
             </div>
 
             <div className="flex gap-3 mt-4">
+                
+                <button
+                    onClick={() => navigate(`/questions/${question.id}`)}
+                    className="border rounded-lg px-4 py-2"
+                >
+                    View Details
+                </button>
+                
                 <button
                     onClick={() =>
                         navigate(`/questions/edit/${question.id}`)

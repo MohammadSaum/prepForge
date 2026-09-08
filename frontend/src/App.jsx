@@ -6,6 +6,7 @@ import Dashboard from "./pages/Dashboard";
 import Questions from "./pages/Questions";
 import AddQuestion from "./pages/AddQuestion";
 import EditQuestion from "./pages/EditQuestion";
+import QuestionDetails from "./pages/QuestionDetails";
 
 const App = () => {
   return (
@@ -53,6 +54,15 @@ const App = () => {
                 element={
                     <ProtectedRoute>
                         <EditQuestion />
+                    </ProtectedRoute>
+                }
+            />
+
+            <Route
+                path="/questions/:id"
+                element={
+                    <ProtectedRoute>
+                        <QuestionDetails />
                     </ProtectedRoute>
                 }
             />
