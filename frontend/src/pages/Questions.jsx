@@ -5,6 +5,8 @@ import QuestionCard from "../components/QuestionCard";
 import FilterBar from "../components/FilterBar";
 import Pagination from"../components/Pagination"; 
 import { useNavigate } from "react-router-dom";
+import PageTransition from "../components/PageTransition";
+import LoadingState from "../components/LoadingState";
 
 function Questions() {
 
@@ -67,9 +69,14 @@ function Questions() {
 
 }, [currentPage, pageSize, topic, difficulty, status]);
 
-    if(loading) {
-        return <p className="p-6">Loading</p>
-    }
+    if (loading) {
+    return (
+        <div className="min-h-screen bg-[#08090A]">
+            <Navbar />
+            <LoadingState />
+        </div>
+    );
+}
 
     if(error) {
         return <p className="p-6">
@@ -78,84 +85,151 @@ function Questions() {
     }
 
     return (
-        <div className="min-h-screen">
+        <PageTransition>
+    <div className="min-h-screen bg-[#08090A]">
 
-            <Navbar/>
+        <Navbar />
 
-            <main className="max-w-6xl mx-auto p-6">
+        <main className="max-w-6xl mx-auto px-6 py-12">
 
-                <div className="flex items-center justify-between mb-8">
+            {/* Header */}
+            <div className="
+                flex
+                flex-col
+                md:flex-row
+                md:items-end
+                md:justify-between
+                gap-6
+                mb-10
+            ">
 
-                    <div>
+                <div>
+                    <p className="
+                        text-xs
+                        uppercase
+                        tracking-[0.2em]
+                        text-[#686A70]
+                        mb-3
+                    ">
+                        Interview preparation
+                    </p>
 
-                        <h1 className="text-3xl font-bold">
-                            Questions
-                        </h1>
+                    <h1 className="
+                        text-4xl
+                        font-semibold
+                        tracking-tight
+                        text-[#F2F2F2]
+                    ">
+                        Questions
+                    </h1>
 
-                        <p className="text-gray-500 mt-2">
-                            Manage your interview questions 
-                        </p>
-                    </div>
-
-                    <button
-                        onClick={() => navigate("/questions/add")}
-                        className="border rounded-lg px-4 py-2 cursor-pointer">
-                        + Add Question
-                    </button>
+                    <p className="
+                        text-[#8A8D93]
+                        mt-3
+                        text-sm
+                    ">
+                        Manage and track your interview questions.
+                    </p>
                 </div>
 
-                <FilterBar 
-                    topic={topic}
-                    difficulty={difficulty}
-                    status={status}
-                    onTopicChange={handleTopicChange}
-                    onDifficultyChange={handleDifficultyChange}
-                    onStatusChange={handleStatusChange}
-                /> 
-                <div>
-                    {questions.length === 0 ? (
-                        <div className="border rounded-xl p-10 text-center">
-                            <h2 className="text-xl font-semibold">
-                                No questions found
-                            </h2>
+                <button
+                    onClick={() => navigate("/questions/add")}
+                    className="
+                        bg-[#F2F2F2]
+                        text-[#08090A]
+                        rounded-lg
+                        px-5 py-2.5
+                        text-sm
+                        font-medium
+                        transition-all duration-200
+                        hover:bg-white
+                    "
+                >
+                    + Add Question
+                </button>
 
-                            <p className="text-gray-500 mt-2">
-                                Add a question or try changing your filters.
-                            </p>
-                        </div>
-                    ) : (
-                        questions.map((question) => (
-                            <QuestionCard
-                                key={question.id}
-                                question={question}
-                                onDelete={(deletedId) => {
-                                    setQuestions((prev) => {
-                                        const updatedQuestions = prev.filter(
+            </div>
+
+            {/* Filters */}
+            <FilterBar
+                topic={topic}
+                difficulty={difficulty}
+                status={status}
+                onTopicChange={handleTopicChange}
+                onDifficultyChange={handleDifficultyChange}
+                onStatusChange={handleStatusChange}
+            />
+
+            {/* Questions */}
+            <div className="space-y-4">
+
+                {questions.length === 0 ? (
+                    <div className="
+                        border border-[#24272B]
+                        bg-[#101214]
+                        rounded-xl
+                        px-6 py-16
+                        text-center
+                    ">
+                        <h2 className="
+                            text-lg
+                            font-medium
+                            text-[#F2F2F2]
+                        ">
+                            No questions found
+                        </h2>
+
+                        <p className="
+                            text-sm
+                            text-[#686A70]
+                            mt-2
+                        ">
+                            Add a question or try changing your filters.
+                        </p>
+                    </div>
+                ) : (
+                    questions.map((question) => (
+                        <QuestionCard
+                            key={question.id}
+                            question={question}
+                            onDelete={(deletedId) => {
+                                setQuestions((prev) => {
+                                    const updatedQuestions =
+                                        prev.filter(
                                             (q) => q.id !== deletedId
                                         );
 
-                                        if (updatedQuestions.length === 0 && currentPage > 0) {
-                                            setCurrentPage((prevPage) => prevPage - 1);
-                                        }
+                                    if (
+                                        updatedQuestions.length === 0 &&
+                                        currentPage > 0
+                                    ) {
+                                        setCurrentPage(
+                                            (prevPage) => prevPage - 1
+                                        );
+                                    }
 
-                                        return updatedQuestions;
-                                    });
-                                }}
-                            />
-                        ))
-                    )}
-                </div>
-
-                {questions.length > 0 && (
-                    <Pagination 
-                        currentPage={currentPage}
-                        totalPages={totalPages}
-                        onPageChange={setCurrentPage}
-                    /> 
+                                    return updatedQuestions;
+                                });
+                            }}
+                        />
+                    ))
                 )}
-            </main>
-        </div>
-    )
+
+            </div>
+
+            {/* Pagination */}
+            {totalPages > 1 && (
+                <Pagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onPageChange={setCurrentPage}
+                />
+            )}
+
+        </main>
+    </div>
+    </PageTransition>
+);
 }
 
 export default Questions;

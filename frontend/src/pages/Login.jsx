@@ -2,9 +2,9 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import api from "../services/api";
 import { useAuth } from "../context/AuthContext";
+import PageTransition from "../components/PageTransition";
 
 function Login() {
-
     const [formData, setFormData] = useState({
         email: "",
         password: ""
@@ -13,9 +13,8 @@ function Login() {
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
 
-    const navigate = useNavigate();
-
     const { login } = useAuth();
+    const navigate = useNavigate();
 
     const handleChange = (e) => {
         setFormData({
@@ -31,19 +30,14 @@ function Login() {
         setLoading(true);
 
         try {
-            const response = await api.post(
-                "/users/login",
-                formData
-            );
+            const response = await api.post("/users/login", formData);
 
             login(response.data.token);
-
             navigate("/dashboard");
-
         } catch (error) {
             setError(
                 error.response?.data?.message ||
-                "Invalid email or password"
+                "Login failed"
             );
         } finally {
             setLoading(false);
@@ -51,64 +45,183 @@ function Login() {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center">
+
+        <PageTransition>
+        
+        <div className="min-h-screen bg-[#08090A] flex items-center justify-center px-6">
 
             <div className="w-full max-w-md">
 
-                <h1 className="text-3xl font-bold text-center mb-8">
-                    Login to PrepForge
-                </h1>
+                {/* Brand */}
+                <div className="text-center mb-10">
+                    <Link
+                        to="/login"
+                        className="text-2xl font-semibold tracking-tight text-[#F2F2F2]"
+                    >
+                        PrepForge
+                    </Link>
 
-                <form
-                    onSubmit={handleSubmit}
-                    className="space-y-4"
-                >
+                    <p className="text-sm text-[#686A70] mt-3">
+                        Your interview preparation workspace.
+                    </p>
+                </div>
 
-                    <input
-                        type="email"
-                        name="email"
-                        placeholder="Email"
-                        value={formData.email}
-                        onChange={handleChange}
-                        className="w-full border rounded-lg p-3"
-                        required
-                    />
+                {/* Form */}
+                <div className="
+                    border
+                    border-[#24272B]
+                    bg-gradient-to-br
+                    from-[#151719]
+                    to-[#101214]
+                    rounded-xl
+                    p-6
+                    md:p-8
+                ">
 
-                    <input
-                        type="password"
-                        name="password"
-                        placeholder="Password"
-                        value={formData.password}
-                        onChange={handleChange}
-                        className="w-full border rounded-lg p-3"
-                        required
-                    />
+                    <div className="mb-7">
+                        <h1 className="
+                            text-xl
+                            font-semibold
+                            text-[#F2F2F2]
+                        ">
+                            Welcome back
+                        </h1>
+
+                        <p className="
+                            text-sm
+                            text-[#686A70]
+                            mt-2
+                        ">
+                            Sign in to continue your preparation.
+                        </p>
+                    </div>
 
                     {error && (
-                        <p className="text-red-500 text-sm">
-                            {error}
-                        </p>
+                        <div className="
+                            border
+                            border-[#A8493E]/30
+                            bg-[#A8493E]/5
+                            rounded-lg
+                            px-4
+                            py-3
+                            mb-5
+                        ">
+                            <div className="
+                                    border
+                                    border-[#A8493E]/30
+                                    bg-[#A8493E]/5
+                                    rounded-lg
+                                    px-4
+                                    py-3
+                                ">
+                                    <p className="text-sm text-[#C97870]">
+                                        {error}
+                                    </p>
+                                </div>
+                        </div>
                     )}
 
-                    <button
-                        type="submit"
-                        disabled={loading}
-                        className="w-full bg-black text-white rounded-lg p-3 cursor-pointer"
+                    <form
+                        onSubmit={handleSubmit}
+                        className="space-y-5"
                     >
-                        {loading ? "Logging in" : "Login"}
-                    </button>
 
-                </form>
+                        <FormField label="Email">
+                            <input
+                                type="email"
+                                name="email"
+                                value={formData.email}
+                                onChange={handleChange}
+                                placeholder="you@example.com"
+                                required
+                                className="input"
+                            />
+                        </FormField>
 
-                <p className="text-center mt-6">
-                    Don't have an account?{" "}
-                    <Link to="/register" className="underline">
-                        Register
-                    </Link>
-                </p>
+                        <FormField label="Password">
+                            <input
+                                type="password"
+                                name="password"
+                                value={formData.password}
+                                onChange={handleChange}
+                                placeholder="Enter your password"
+                                required
+                                className="input"
+                            />
+                        </FormField>
+
+                        <button
+                            type="submit"
+                            disabled={loading}
+                            className="
+                                w-full
+                                bg-[#F2F2F2]
+                                text-[#08090A]
+                                rounded-lg
+                                px-5
+                                py-3
+                                text-sm
+                                font-medium
+                                transition-colors
+                                duration-200
+                                hover:bg-white
+                                disabled:opacity-50
+                            "
+                        >
+                            {loading ? "Signing in..." : "Sign In"}
+                        </button>
+
+                    </form>
+
+                    <div className="
+                        border-t
+                        border-[#24272B]
+                        mt-6
+                        pt-6
+                        text-center
+                    ">
+                        <p className="text-sm text-[#686A70]">
+                            Don't have an account?
+                        </p>
+
+                        <Link
+                            to="/register"
+                            className="
+                                inline-block
+                                text-sm
+                                text-[#D4D4D8]
+                                mt-2
+                                hover:text-white
+                                transition-colors
+                            "
+                        >
+                            Create an account →
+                        </Link>
+                    </div>
+
+                </div>
 
             </div>
+        </div>
 
+        </PageTransition>
+    );
+}
+
+function FormField({ label, children }) {
+    return (
+        <div>
+            <label className="
+                block
+                text-sm
+                font-medium
+                text-[#D4D4D8]
+                mb-2
+            ">
+                {label}
+            </label>
+
+            {children}
         </div>
     );
 }

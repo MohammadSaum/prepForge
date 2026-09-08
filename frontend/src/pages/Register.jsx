@@ -1,11 +1,13 @@
-import { useState } from "react"
-import api from "../services/api"
-import { useNavigate, Link } from "react-router-dom";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import api from "../services/api";
+import PageTransition from "../components/PageTransition";
 
-const Register = () => {
-
+function Register() {
     const [formData, setFormData] = useState({
-        name: "", email: "", password: ""
+        name: "",
+        email: "",
+        password: ""
     });
 
     const [error, setError] = useState("");
@@ -14,86 +16,235 @@ const Register = () => {
     const navigate = useNavigate();
 
     const handleChange = (e) => {
-        setFormData({...formData, [e.target.name]: e.target.value})
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value
+        });
     };
 
     const handleSubmit = async (e) => {
-        e.preventDefault(); 
+        e.preventDefault();
 
         setError("");
-        setLoading(true); 
+        setLoading(true);
 
         try {
-            await api.post("/users/register", formData); 
-
-            navigate("/login"); 
+            await api.post("/users/register", formData);
+            navigate("/login");
         } catch (error) {
-            setError(error.response?.data?.message || "Registration failed"); 
+            setError(
+                error.response?.data?.message ||
+                "Registration failed"
+            );
         } finally {
             setLoading(false);
         }
-    }
+    };
 
-  return (
-    <div className='min-h-screen flex items-center justify-center bg-amber-400'>
-        <div className='w-full max-w-md'>
+    return (
+        <PageTransition>
+        <div className="min-h-screen bg-[#08090A] flex items-center justify-center px-6 py-10">
 
-            <h1 className='text-3xl font-bold text-center mb-8'>
-                Create your Prepforge account
-            </h1>
+            <div className="w-full max-w-md">
 
-            <form onSubmit={handleSubmit} className='space-y-4'>
+                {/* Brand */}
+                <div className="text-center mb-10">
+                    <Link
+                        to="/login"
+                        className="
+                            text-2xl
+                            font-semibold
+                            tracking-tight
+                            text-[#F2F2F2]
+                        "
+                    >
+                        PrepForge
+                    </Link>
 
-                    <input 
-                        type="name"
-                        name="name"
-                        placeholder="Name"
-                        value={formData.name}
-                        onChange={handleChange}
-                        className="w-full border rounded-lg p-3"
-                        required
-                    /> 
+                    <p className="text-sm text-[#686A70] mt-3">
+                        Build your interview preparation system.
+                    </p>
+                </div>
 
-                    <input 
-                        type="email"
-                        name="email"
-                        placeholder="Email"
-                        value={formData.email}
-                        onChange={handleChange}
-                        className="w-full border rounded-lg p-3"
-                        required
-                    /> 
+                {/* Form Card */}
+                <div className="
+                    border
+                    border-[#24272B]
+                    bg-gradient-to-br
+                    from-[#151719]
+                    to-[#101214]
+                    rounded-xl
+                    p-6
+                    md:p-8
+                ">
 
-                    <input
-                        type="password"
-                        name="password"
-                        placeholder="Password"
-                        value={formData.password}
-                        onChange={handleChange}
-                        className="w-full border rounded-lg p-3"
-                        required
-                    />
+                    <div className="mb-7">
+                        <h1 className="
+                            text-xl
+                            font-semibold
+                            text-[#F2F2F2]
+                        ">
+                            Create your account
+                        </h1>
+
+                        <p className="
+                            text-sm
+                            text-[#686A70]
+                            mt-2
+                        ">
+                            Start organizing your interview preparation.
+                        </p>
+                    </div>
 
                     {error && (
-                        <p className="text-red-500 text-sms">{error}</p>
+                        <div className="
+                            border
+                            border-[#A8493E]/30
+                            bg-[#A8493E]/5
+                            rounded-lg
+                            px-4
+                            py-3
+                            mb-5
+                        ">
+                            <div className="
+                                border
+                                border-[#A8493E]/30
+                                bg-[#A8493E]/5
+                                rounded-lg
+                                px-4
+                                py-3
+                            ">
+                                <p className="text-sm text-[#C97870]">
+                                    {error}
+                                </p>
+                            </div>
+                        </div>
                     )}
 
-                    <button type="submit" disable={loading} className="w-full bg-black text-white rounded-lg p-3 cursor-pointer">{loading ? "Creting account" : "Register"}</button>
-            </form>
+                    <form
+                        onSubmit={handleSubmit}
+                        className="space-y-5"
+                    >
 
-            <p
-                className="text-center mt-6">
-                    Already have an account?{" "}
-                    <Link
-                        to ="/login"
-                        className="underline">
-                        Login
-                    </Link>
-                </p>
-            
+                        {/* Name */}
+                        <FormField label="Name">
+                            <input
+                                type="text"
+                                name="name"
+                                value={formData.name}
+                                onChange={handleChange}
+                                placeholder="Your name"
+                                required
+                                className="input"
+                            />
+                        </FormField>
+
+                        {/* Email */}
+                        <FormField label="Email">
+                            <input
+                                type="email"
+                                name="email"
+                                value={formData.email}
+                                onChange={handleChange}
+                                placeholder="you@example.com"
+                                required
+                                className="input"
+                            />
+                        </FormField>
+
+                        {/* Password */}
+                        <FormField label="Password">
+                            <input
+                                type="password"
+                                name="password"
+                                value={formData.password}
+                                onChange={handleChange}
+                                placeholder="Create a password"
+                                required
+                                className="input"
+                            />
+                        </FormField>
+
+                        {/* Submit */}
+                        <button
+                            type="submit"
+                            disabled={loading}
+                            className="
+                                w-full
+                                bg-[#F2F2F2]
+                                text-[#08090A]
+                                rounded-lg
+                                px-5
+                                py-3
+                                text-sm
+                                font-medium
+                                transition-all
+                                duration-200
+                                hover:bg-white
+                                hover:-translate-y-0.5
+                                disabled:opacity-50
+                                disabled:hover:translate-y-0
+                            "
+                        >
+                            {loading
+                                ? "Creating account..."
+                                : "Create Account"}
+                        </button>
+
+                    </form>
+
+                    {/* Login link */}
+                    <div className="
+                        border-t
+                        border-[#24272B]
+                        mt-6
+                        pt-6
+                        text-center
+                    ">
+                        <p className="text-sm text-[#686A70]">
+                            Already have an account?
+                        </p>
+
+                        <Link
+                            to="/login"
+                            className="
+                                inline-block
+                                text-sm
+                                text-[#D4D4D8]
+                                mt-2
+                                transition-colors
+                                duration-200
+                                hover:text-white
+                            "
+                        >
+                            Sign in →
+                        </Link>
+                    </div>
+
+                </div>
+
+            </div>
         </div>
-    </div>
-  )
+        </PageTransition>
+    );
 }
 
-export default Register
+function FormField({ label, children }) {
+    return (
+        <div>
+            <label className="
+                block
+                text-sm
+                font-medium
+                text-[#D4D4D8]
+                mb-2
+            ">
+                {label}
+            </label>
+
+            {children}
+        </div>
+    );
+}
+
+export default Register;

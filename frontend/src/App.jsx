@@ -7,13 +7,14 @@ import Questions from "./pages/Questions";
 import AddQuestion from "./pages/AddQuestion";
 import EditQuestion from "./pages/EditQuestion";
 import QuestionDetails from "./pages/QuestionDetails";
+import Landing from "./pages/Landing.";
 
 const App = () => {
   return (
     <BrowserRouter>
         <Routes>
             
-            <Route path = "/" element = {<h1>PrepForge</h1>} />  
+            <Route path="/" element={<Landing />} /> 
 
             <Route path="/register" element={<Register />}/> 
 

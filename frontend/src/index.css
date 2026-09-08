@@ -1,1 +1,77 @@
 @import "tailwindcss";
+
+:root {
+    font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    color: #F5F5F5;
+    background: #08090A;
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-width: 320px;
+    min-height: 100vh;
+    background: #08090A;
+}
+
+button,
+input,
+select,
+textarea {
+    font: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+@layer base {
+    a {
+        text-decoration: none;
+    }
+}
+
+.input {
+    width: 100%;
+    background: #101214;
+    border: 1px solid #24272B;
+    border-radius: 8px;
+    padding: 12px 14px;
+    color: #F2F2F2;
+    outline: none;
+    transition: border-color 200ms ease;
+}
+
+.input::placeholder {
+    color: #686A70;
+}
+
+.input:focus {
+    border-color: #4A4D52;
+}
+
+.input option {
+    background: #101214;
+    color: #F2F2F2;
+}
+
+.page-transition {
+    animation: pageEnter 220ms ease-out;
+}
+
+@keyframes pageEnter {
+    from {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
