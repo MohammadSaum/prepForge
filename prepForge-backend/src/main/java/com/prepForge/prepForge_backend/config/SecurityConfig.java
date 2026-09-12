@@ -57,7 +57,7 @@ public class SecurityConfig {
         configuration.setAllowedOrigins(
                 List.of("http://localhost:5173",
                         "http://localhost:3000",
-                        "https://o-no.onrender.com")
+                        "https://o-no-jse1.onrender.com")
         );
 
         configuration.setAllowedMethods(
