@@ -47,7 +47,7 @@ function Navbar() {
                         text-[#F2F2F2]
                     "
                 >
-                    PrepForge
+                    O-No
                 </Link>
 
                 {/* Desktop navigation */}

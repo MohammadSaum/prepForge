@@ -29,7 +29,7 @@ function Landing() {
                                 tracking-tight
                             "
                         >
-                            PrepForge
+                            O-No
                         </Link>
 
                         <div className="flex items-center gap-3">
@@ -290,7 +290,7 @@ function Landing() {
                                     leading-7
                                     max-w-lg
                                 ">
-                                    PrepForge gives you a simple system
+                                    O-No gives you a simple system
                                     for managing the problems you solve,
                                     understanding your strengths, and
                                     knowing what to revisit.
@@ -451,7 +451,7 @@ function Landing() {
                             text-sm
                             text-[#686A70]
                         ">
-                            PrepForge
+                            O-No
                         </p>
 
                         <p className="

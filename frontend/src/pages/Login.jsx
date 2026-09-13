@@ -58,7 +58,7 @@ function Login() {
                         to="/login"
                         className="text-2xl font-semibold tracking-tight text-[#F2F2F2]"
                     >
-                        PrepForge
+                        O-No
                     </Link>
 
                     <p className="text-sm text-[#686A70] mt-3">
